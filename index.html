@@ -34,7 +34,6 @@
     pointer-events: none; z-index: 0;
   }
 
-  /* ── SCENES ── */
   .scene {
     position: fixed; inset: 0; z-index: 1;
     display: flex; flex-direction: column;
@@ -49,12 +48,10 @@
   .scene.visible  { opacity: 1; pointer-events: all; }
   .scene.hidden   { opacity: 0; pointer-events: none; }
 
-  /* ── ORNAMENT ── */
   .ornament { display: flex; align-items: center; gap: 1rem; width: min(420px, 88vw); }
   .ornament-line { flex: 1; height: 1px; background: linear-gradient(90deg,transparent,var(--gold),transparent); }
   .ornament-diamond { width: 8px; height: 8px; background: var(--gold); transform: rotate(45deg); box-shadow: 0 0 8px var(--gold); }
 
-  /* ── SCENE 1: CAKE ── */
   #scene-cake { gap: 1.8rem; }
 
   .cake-wrap {
@@ -112,7 +109,27 @@
     padding:0 1rem; line-height:1.5;
   }
 
-  /* ── SCENE 2: GALLERY ── */
+  /* Tap to start overlay — shown on top of cake scene */
+  #tap-overlay {
+    position: fixed; inset: 0; z-index: 10;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: flex-end;
+    padding-bottom: 3.5rem;
+    pointer-events: none;
+  }
+  #tap-hint {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: .75rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: rgba(212,175,55,.5);
+    animation: blink 1.8s ease-in-out infinite;
+  }
+  @keyframes blink {
+    0%,100% { opacity:.3; }
+    50%      { opacity:.9; }
+  }
+
   #scene-gallery {
     justify-content: flex-start;
     padding-top: 4rem; padding-bottom: 4rem;
@@ -175,14 +192,6 @@
   }
   .gallery-placeholder .icon { font-size:1.8rem; opacity:.3; }
 
-  .scroll-hint {
-    color:rgba(212,175,55,.38); font-size:.75rem;
-    letter-spacing:.2em; text-transform:uppercase;
-    font-family:'Cormorant Garamond',serif;
-    flex-shrink:0;
-  }
-
-  /* Lightbox */
   #lightbox {
     position:fixed; inset:0; z-index:200;
     background:rgba(0,0,0,.94);
@@ -205,7 +214,6 @@
   }
   #lightbox-close:hover { transform:scale(1.2) rotate(90deg); }
 
-  /* ── SCENE 3: WISHES ── */
   #scene-wishes {
     justify-content:flex-start;
     padding-top:5rem; padding-bottom:5rem;
@@ -283,7 +291,6 @@
     opacity:.45; flex-shrink:0;
   }
 
-  /* ── NAV DOTS ── */
   .nav-dots {
     position:fixed; right:1.2rem; top:50%;
     transform:translateY(-50%);
@@ -301,32 +308,38 @@
     background:var(--gold); box-shadow:0 0 10px var(--gold); transform:scale(1.35);
   }
 
-  /* ── MUSIC BTN ── */
-  #music-btn {
-    position:fixed; bottom:1.4rem; right:1.4rem; z-index:60;
-    width:42px; height:42px; border-radius:50%;
-    border:1px solid rgba(212,175,55,.5);
-    background:rgba(10,10,10,.88);
-    color:var(--gold); font-size:1.1rem;
-    cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    box-shadow:0 0 14px rgba(212,175,55,.2);
-    transition:box-shadow .3s, transform .2s;
-    backdrop-filter:blur(4px);
+  #wishes-btn {
+    display: none;
+    align-items: center; justify-content: center; gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding: 0.9rem 2.4rem;
+    border: 1px solid var(--gold);
+    border-radius: 3px;
+    background: transparent;
+    color: var(--gold);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.7s ease, transform 0.7s ease, background 0.3s, box-shadow 0.3s;
+    flex-shrink: 0;
   }
-  #music-btn:hover { box-shadow:0 0 24px rgba(212,175,55,.5); transform:scale(1.1); }
-  #music-btn.playing::after {
-    content:''; position:absolute;
-    width:100%; height:100%; border-radius:50%;
-    border:1px solid rgba(212,175,55,.3);
-    animation:pulse-ring 1.5s ease-out infinite;
+  #wishes-btn.visible {
+    display: flex;
+    animation: btnReveal 0.7s ease forwards;
   }
-  @keyframes pulse-ring {
-    from { transform:scale(1); opacity:.7; }
-    to   { transform:scale(1.65); opacity:0; }
+  @keyframes btnReveal {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  #wishes-btn:hover, #wishes-btn:active {
+    background: rgba(212,175,55,0.08);
+    box-shadow: 0 0 24px rgba(212,175,55,0.3);
   }
 
-  /* ── MOBILE ── */
   @media (max-width:540px) {
     .gallery-grid { grid-template-columns:repeat(2,1fr); }
     .gallery-item:nth-child(1){ grid-column:1/3; grid-row:1/2; }
@@ -342,18 +355,19 @@
 
 <canvas id="sparkle-canvas"></canvas>
 
+<!-- Blinking "tap to begin" hint at bottom of cake screen -->
+<div id="tap-overlay">
+  <span id="tap-hint">✦ &nbsp; Tap anywhere to begin &nbsp; ✦</span>
+</div>
+
 <div class="nav-dots">
   <div class="nav-dot active" data-scene="0"></div>
   <div class="nav-dot" data-scene="1"></div>
   <div class="nav-dot" data-scene="2"></div>
 </div>
 
-<button id="music-btn" title="Toggle music">♪</button>
-<!-- ═══════════════════════════════════════════════════════
-     MUSIC: swap the src below with your own .mp3 file path
-     e.g. <source src="love-song.mp3" type="audio/mpeg">
-═══════════════════════════════════════════════════════ -->
-<audio id="bg-music" loop>
+<!-- autoplay muted: browser allows muted autoplay, JS unmutes on first tap -->
+<audio id="bg-music" loop autoplay muted>
   <source src="the_mountain-happy-birthday-508020.mp3" type="audio/mpeg">
 </audio>
 
@@ -391,14 +405,10 @@
 
 <!-- ════════════ SCENE 2 — GALLERY ════════════ -->
 <section id="scene-gallery" class="scene hidden">
-  <h2 class="gallery-title">Scroll done</h2>
+  <h2 class="gallery-title">Scroll Down</h2>
   <div class="ornament"><div class="ornament-line"></div><div class="ornament-diamond"></div><div class="ornament-line"></div></div>
 
   <div class="gallery-grid" id="gallery-grid">
-    <!-- ════════════════════════════════════════
-         PHOTOS: Replace src="" with your image.
-         e.g. src="photo1.jpg"  or a URL
-    ════════════════════════════════════════ -->
     <div class="gallery-item" data-index="0">
       <img src="WhatsApp Image 2026-03-31 at 1.47.17 PM.jpeg" alt="Memory 1" onerror="showPlaceholder(this)">
       <div class="gallery-placeholder" style="display:none"><span class="icon">🌹</span>Photo 1</div>
@@ -430,7 +440,7 @@
   </div>
 
   <div class="gold-divider"></div>
-  <p class="scroll-hint">Swipe up for your wishes ↑</p>
+  <button id="wishes-btn">✦ &nbsp; Click Me BirthdAY Boy &nbsp; ✦</button>
 </section>
 
 <!-- ════════════ SCENE 3 — WISHES ════════════ -->
@@ -441,10 +451,6 @@
   </div>
 
   <div class="wishes-container">
-
-    <!-- ════════════════════════════
-         MESSAGE 1
-    ════════════════════════════ -->
     <div class="wish-card" id="wish-1">
       <div class="wish-number">✦ &nbsp; One &nbsp; ✦</div>
       <p class="wish-body">
@@ -459,9 +465,6 @@
       <div class="wish-signature">— Forever yours 🤍</div>
     </div>
 
-    <!-- ════════════════════════════
-         MESSAGE 2
-    ════════════════════════════ -->
     <div class="wish-card" id="wish-2">
       <div class="wish-number">✦ &nbsp; Two &nbsp; ✦</div>
       <p class="wish-body">
@@ -472,9 +475,6 @@
       <div class="wish-signature">— Yours, always 🤍</div>
     </div>
 
-    <!-- ════════════════════════════
-         MESSAGE 3
-    ════════════════════════════ -->
     <div class="wish-card" id="wish-3">
       <div class="wish-number">✦ &nbsp; Three &nbsp; ✦</div>
       <p class="wish-body">
@@ -487,7 +487,6 @@
       </p>
       <div class="wish-signature">With All My Love 🤍</div>
     </div>
-
   </div>
 
   <div class="ornament"><div class="ornament-line"></div><div class="ornament-diamond"></div><div class="ornament-line"></div></div>
@@ -518,115 +517,125 @@
   (function loop(){ctx.clearRect(0,0,W,H);P.forEach(p=>{p.update();p.draw();});requestAnimationFrame(loop);})();
 })();
 
-// ── SCENE MANAGER ──
-const SCENES=['scene-cake','scene-gallery','scene-wishes'];
-let cur=0;
+// ── AUDIO SETUP ──
+// `autoplay muted` se browser allow karta hai silently start karne ko.
+// Pehle touch/click pe unmute ho jata hai — yahi mobile ka rule hai.
+const audio = document.getElementById('bg-music');
+audio.volume = 0.7;
 
-function goTo(i){
-  if(i===cur)return;
-  document.getElementById(SCENES[cur]).classList.replace('visible','hidden');
-  const next=document.getElementById(SCENES[i]);
-  next.classList.replace('hidden','visible');
-  // scroll next to top
-  next.scrollTop=0;
-  cur=i;
-  updateDots();
-  if(i===1)revealGallery();
-  if(i===2)revealWishes();
+let audioStarted = false;
+function startAudio() {
+  if (audioStarted) return;
+  audioStarted = true;
+  audio.muted = false;
+  audio.currentTime = 0;
+  audio.play().catch(() => {});
+  // Hide the tap hint
+  const hint = document.getElementById('tap-hint');
+  if (hint) hint.style.opacity = '0';
 }
-function updateDots(){document.querySelectorAll('.nav-dot').forEach((d,i)=>d.classList.toggle('active',i===cur));}
-document.querySelectorAll('.nav-dot').forEach(d=>d.addEventListener('click',()=>goTo(+d.dataset.scene)));
+
+// Fire on very first touch OR click — whichever comes first
+document.addEventListener('touchstart', startAudio, { once: true, passive: true });
+document.addEventListener('click',      startAudio, { once: true });
+
+// ── SCENE MANAGER ──
+const SCENES = ['scene-cake','scene-gallery','scene-wishes'];
+let cur = 0;
+
+function goTo(i) {
+  if (i === cur) return;
+  document.getElementById(SCENES[cur]).classList.replace('visible','hidden');
+  const next = document.getElementById(SCENES[i]);
+  next.classList.replace('hidden','visible');
+  next.scrollTop = 0;
+  cur = i;
+  updateDots();
+  if (i === 1) revealGallery();
+  if (i === 2) revealWishes();
+}
+function updateDots() {
+  document.querySelectorAll('.nav-dot').forEach((d,i) => d.classList.toggle('active', i === cur));
+}
+document.querySelectorAll('.nav-dot').forEach(d => {
+  d.addEventListener('click', () => {
+    const target = +d.dataset.scene;
+    if (target === 2 && !wishesUnlocked) return;
+    goTo(target);
+  });
+});
 
 // ── CANDLE BLOW ──
-function blowCandle(id,delay){
-  setTimeout(()=>{
-    const f=document.getElementById('f'+id),s=document.getElementById('s'+id);
-    if(!f)return;
+function blowCandle(id, delay) {
+  setTimeout(() => {
+    const f = document.getElementById('f'+id), s = document.getElementById('s'+id);
+    if (!f) return;
     f.classList.add('blow-out');
-    setTimeout(()=>{f.style.display='none';s.classList.add('active');},380);
-  },delay);
+    setTimeout(() => { f.style.display='none'; s.classList.add('active'); }, 380);
+  }, delay);
 }
-window.addEventListener('load',()=>{
-  blowCandle(1,1800);blowCandle(3,2100);blowCandle(2,2400);blowCandle(4,2700);
-  setTimeout(()=>{document.getElementById('cake-text').textContent='✨ Your wish has been sent to the stars ✨';},3000);
-  setTimeout(()=>goTo(1),4500);
+
+window.addEventListener('load', () => {
+  blowCandle(1,1800); blowCandle(3,2100); blowCandle(2,2400); blowCandle(4,2700);
+  setTimeout(() => { document.getElementById('cake-text').textContent = '✨ Your wish has been sent to the stars ✨'; }, 3000);
+  setTimeout(() => goTo(1), 4500);
 });
 
 // ── GALLERY ──
-function revealGallery(){
-  document.querySelectorAll('.gallery-item').forEach((el,i)=>{
-    setTimeout(()=>el.classList.add('revealed'),120+i*130);
+function revealGallery() {
+  document.querySelectorAll('.gallery-item').forEach((el,i) => {
+    setTimeout(() => el.classList.add('revealed'), 120 + i*130);
   });
 }
 
-function showPlaceholder(img){
-  img.style.display='none';
-  const ph=img.nextElementSibling;
-  if(ph)ph.style.display='flex';
+function showPlaceholder(img) {
+  img.style.display = 'none';
+  const ph = img.nextElementSibling;
+  if (ph) ph.style.display = 'flex';
 }
-document.querySelectorAll('.gallery-item img').forEach(img=>{
-  if(!img.src||img.src===window.location.href)showPlaceholder(img);
+document.querySelectorAll('.gallery-item img').forEach(img => {
+  if (!img.src || img.src === window.location.href) showPlaceholder(img);
 });
 
 // Lightbox
-const lb=document.getElementById('lightbox'),lbImg=document.getElementById('lightbox-img');
-document.querySelectorAll('.gallery-item').forEach(item=>{
-  item.addEventListener('click',()=>{
-    const img=item.querySelector('img');
-    if(!img||!img.src||img.style.display==='none')return;
-    lbImg.src=img.src; lb.classList.add('open');
+const lb = document.getElementById('lightbox'), lbImg = document.getElementById('lightbox-img');
+document.querySelectorAll('.gallery-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const img = item.querySelector('img');
+    if (!img || !img.src || img.style.display === 'none') return;
+    lbImg.src = img.src; lb.classList.add('open');
   });
 });
-document.getElementById('lightbox-close').addEventListener('click',()=>lb.classList.remove('open'));
-lb.addEventListener('click',e=>{if(e.target===lb)lb.classList.remove('open');});
+document.getElementById('lightbox-close').addEventListener('click', () => lb.classList.remove('open'));
+lb.addEventListener('click', e => { if (e.target === lb) lb.classList.remove('open'); });
 
-// Auto-advance gallery → wishes on scroll to bottom
-document.getElementById('scene-gallery').addEventListener('scroll',function(){
-  if(this.scrollTop+this.clientHeight>=this.scrollHeight-80)goTo(2);
-},{passive:true});
+// ── GALLERY SCROLL → show wishes button at bottom ──
+let wishesUnlocked = false;
+const galleryScene = document.getElementById('scene-gallery');
+const wishesBtn   = document.getElementById('wishes-btn');
+
+galleryScene.addEventListener('scroll', function() {
+  if (!wishesUnlocked && this.scrollTop + this.clientHeight >= this.scrollHeight - 70) {
+    wishesUnlocked = true;
+    wishesBtn.classList.add('visible');
+  }
+}, { passive: true });
+
+wishesBtn.addEventListener('click', () => goTo(2));
 
 // ── WISHES ──
-function revealWishes(){
-  ['wish-1','wish-2','wish-3'].forEach((id,i)=>{
-    setTimeout(()=>document.getElementById(id)?.classList.add('revealed'),250+i*750);
+function revealWishes() {
+  ['wish-1','wish-2','wish-3'].forEach((id,i) => {
+    setTimeout(() => document.getElementById(id)?.classList.add('revealed'), 250 + i*750);
   });
-  setTimeout(()=>document.getElementById('final-line')?.classList.add('revealed'),3200);
+  setTimeout(() => document.getElementById('final-line')?.classList.add('revealed'), 3200);
 }
 
-// ── MUSIC ──
-const audio=document.getElementById('bg-music'),btn=document.getElementById('music-btn');
-let playing=false;
-btn.addEventListener('click',()=>{
-  if(playing){audio.pause();btn.textContent='♪';btn.classList.remove('playing');}
-  else{audio.play().catch(()=>{});btn.textContent='⏸';btn.classList.add('playing');}
-  playing=!playing;
-});
-document.body.addEventListener('click',function autoPlay(){
-  if(!playing){audio.play().then(()=>{playing=true;btn.textContent='⏸';btn.classList.add('playing');}).catch(()=>{});}
-  document.body.removeEventListener('click',autoPlay);
-},{once:true});
-
-// ── SWIPE (mobile) ──
-let tx=0,ty=0;
-document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
-document.addEventListener('touchend',e=>{
-  const dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
-  // Only swipe when not scrolling inside a scrollable scene
-  const activeScene=document.getElementById(SCENES[cur]);
-  const scrollable=activeScene.scrollHeight>activeScene.clientHeight;
-  if(scrollable&&Math.abs(dy)>60&&activeScene.scrollTop>0&&dy>0)return; // let scroll handle upward
-  if(Math.abs(dy)>Math.abs(dx)&&Math.abs(dy)>55){
-    if(dy<0)goTo(Math.min(cur+1,2));
-    else     goTo(Math.max(cur-1,0));
-  }
-},{passive:true});
-
 // ── KEYBOARD ──
-document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowDown'||e.key==='ArrowRight')goTo(Math.min(cur+1,2));
-  if(e.key==='ArrowUp'  ||e.key==='ArrowLeft') goTo(Math.max(cur-1,0));
-  if(e.key==='Escape')lb.classList.remove('open');
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') lb.classList.remove('open');
 });
 </script>
 </body>
 </html>
+

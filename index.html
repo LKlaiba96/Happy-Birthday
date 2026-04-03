@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0A0A0A">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Happy Birthday Abdul Wadood💛</title>
+<title>Happy Birthday My Love 💛</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -26,7 +26,6 @@
     background: var(--black);
     color: var(--white);
     font-family: 'Cormorant Garamond', serif;
-    touch-action: pan-y;
   }
 
   #sparkle-canvas {
@@ -34,6 +33,72 @@
     pointer-events: none; z-index: 0;
   }
 
+  /* ══════════════════════════════
+     ENTRY SCREEN
+  ══════════════════════════════ */
+  #entry-screen {
+    position: fixed; inset: 0; z-index: 100;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 2.5rem;
+    background: var(--black);
+    transition: opacity 1s ease;
+  }
+  #entry-screen.fade-out {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .entry-ornament { display: flex; align-items: center; gap: 1rem; width: min(320px, 80vw); }
+  .entry-ornament-line { flex: 1; height: 1px; background: linear-gradient(90deg,transparent,var(--gold),transparent); }
+  .entry-ornament-diamond { width: 7px; height: 7px; background: var(--gold); transform: rotate(45deg); box-shadow: 0 0 8px var(--gold); }
+
+  .entry-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(2.8rem, 9vw, 4.5rem);
+    color: var(--gold);
+    text-shadow: 0 0 40px rgba(212,175,55,.6);
+    text-align: center;
+    line-height: 1.2;
+  }
+  .entry-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(.85rem, 2.5vw, 1rem);
+    color: rgba(212,175,55,.5);
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  /* The big open button */
+  #open-btn {
+    position: relative;
+    padding: 1.1rem 3rem;
+    border: 1px solid var(--gold);
+    border-radius: 3px;
+    background: transparent;
+    color: var(--gold);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background .3s, box-shadow .3s;
+    animation: pulseBorder 2.5s ease-in-out infinite;
+  }
+  #open-btn:hover, #open-btn:active {
+    background: rgba(212,175,55,.08);
+    box-shadow: 0 0 30px rgba(212,175,55,.35);
+  }
+  @keyframes pulseBorder {
+    0%,100% { box-shadow: 0 0 8px rgba(212,175,55,.2); }
+    50%      { box-shadow: 0 0 22px rgba(212,175,55,.5); }
+  }
+
+  /* ══════════════════════════════
+     SCENES
+  ══════════════════════════════ */
   .scene {
     position: fixed; inset: 0; z-index: 1;
     display: flex; flex-direction: column;
@@ -52,6 +117,7 @@
   .ornament-line { flex: 1; height: 1px; background: linear-gradient(90deg,transparent,var(--gold),transparent); }
   .ornament-diamond { width: 8px; height: 8px; background: var(--gold); transform: rotate(45deg); box-shadow: 0 0 8px var(--gold); }
 
+  /* ── CAKE ── */
   #scene-cake { gap: 1.8rem; }
 
   .cake-wrap {
@@ -59,7 +125,6 @@
     filter: drop-shadow(0 0 28px rgba(212,175,55,0.35));
     flex-shrink: 0;
   }
-
   .candle {
     position: absolute; bottom: 110px;
     width: 11px; height: 40px;
@@ -109,33 +174,12 @@
     padding:0 1rem; line-height:1.5;
   }
 
-  /* Tap to start overlay — shown on top of cake scene */
-  #tap-overlay {
-    position: fixed; inset: 0; z-index: 10;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: flex-end;
-    padding-bottom: 3.5rem;
-    pointer-events: none;
-  }
-  #tap-hint {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: .75rem;
-    letter-spacing: .25em;
-    text-transform: uppercase;
-    color: rgba(212,175,55,.5);
-    animation: blink 1.8s ease-in-out infinite;
-  }
-  @keyframes blink {
-    0%,100% { opacity:.3; }
-    50%      { opacity:.9; }
-  }
-
+  /* ── GALLERY ── */
   #scene-gallery {
     justify-content: flex-start;
     padding-top: 4rem; padding-bottom: 4rem;
     gap: 2rem;
   }
-
   .gallery-title {
     font-family:'Great Vibes',cursive;
     font-size: clamp(2rem,6vw,3.2rem);
@@ -143,7 +187,6 @@
     text-shadow:0 0 30px rgba(212,175,55,.6);
     text-align:center; flex-shrink:0;
   }
-
   .gallery-grid {
     display:grid;
     grid-template-columns: repeat(3,1fr);
@@ -165,8 +208,7 @@
     cursor:pointer;
   }
   .gallery-item.revealed { opacity:1; transform:scale(1) translateY(0); }
-  .gallery-item:hover,
-  .gallery-item:active {
+  .gallery-item:hover, .gallery-item:active {
     border-color:var(--gold);
     box-shadow:0 0 20px rgba(212,175,55,.4);
     transform:scale(1.03) !important;
@@ -212,100 +254,11 @@
     background:none; border:none;
     text-shadow:0 0 10px var(--gold); transition:transform .2s;
   }
-  #lightbox-close:hover { transform:scale(1.2) rotate(90deg); }
-
-  #scene-wishes {
-    justify-content:flex-start;
-    padding-top:5rem; padding-bottom:5rem;
-    gap:3rem;
-  }
-
-  .wishes-header { text-align:center; flex-shrink:0; }
-  .wishes-header h2 {
-    font-family:'Great Vibes',cursive;
-    font-size: clamp(2.2rem,7vw,3.8rem);
-    color:var(--gold);
-    text-shadow:0 0 40px rgba(212,175,55,.6);
-    line-height:1.1;
-  }
-  .wishes-header p {
-    font-family:'Cormorant Garamond',serif;
-    font-style:italic;
-    font-size: clamp(.9rem,2.5vw,1.1rem);
-    color:rgba(212,175,55,.6);
-    margin-top:.4rem; letter-spacing:.15em; text-transform:uppercase;
-  }
-
-  .wishes-container {
-    display:flex; flex-direction:column;
-    align-items:center; gap:2.5rem;
-    width:min(680px,94vw);
-  }
-
-  .wish-card {
-    position:relative; width:100%;
-    padding: clamp(1.4rem,4vw,2.2rem) clamp(1.2rem,5vw,2.8rem);
-    border:1px solid rgba(212,175,55,.2);
-    border-radius:4px;
-    background:linear-gradient(135deg,rgba(212,175,55,.04),rgba(212,175,55,.01));
-    opacity:0; transform:translateY(28px);
-    transition: opacity .9s ease, transform .9s ease, border-color .3s, box-shadow .3s;
-    overflow:hidden;
-  }
-  .wish-card.revealed { opacity:1; transform:translateY(0); }
-  .wish-card:hover { border-color:rgba(212,175,55,.45); box-shadow:0 0 28px rgba(212,175,55,.1); }
-  .wish-card::before,.wish-card::after { content:'✦'; position:absolute; font-size:.85rem; color:var(--gold); opacity:.45; }
-  .wish-card::before { top:.7rem; left:.9rem; }
-  .wish-card::after  { bottom:.7rem; right:.9rem; }
-
-  .wish-number {
-    font-family:'Playfair Display',serif;
-    font-size:.65rem; letter-spacing:.35em; text-transform:uppercase;
-    color:var(--gold-dark); margin-bottom:.9rem;
-  }
-  .wish-body {
-    font-family:'Cormorant Garamond',serif;
-    font-size: clamp(1rem,2.8vw,1.2rem);
-    font-style:italic; line-height:1.9;
-    color:rgba(255,253,245,.88);
-  }
-  .wish-signature {
-    margin-top:1rem; text-align:right;
-    font-family:'Great Vibes',cursive;
-    font-size:1.4rem; color:var(--gold); opacity:.8;
-  }
-
-  .final-line {
-    font-family:'Great Vibes',cursive;
-    font-size: clamp(1.9rem,5vw,2.6rem);
-    color:var(--gold-light); text-align:center;
-    text-shadow:0 0 28px rgba(240,208,96,.5);
-    opacity:0; transition:opacity 1.2s ease;
-    padding-bottom:2rem; flex-shrink:0;
-  }
-  .final-line.revealed { opacity:1; }
 
   .gold-divider {
     width:min(300px,80vw); height:1px;
     background:linear-gradient(90deg,transparent,var(--gold),transparent);
     opacity:.45; flex-shrink:0;
-  }
-
-  .nav-dots {
-    position:fixed; right:1.2rem; top:50%;
-    transform:translateY(-50%);
-    display:flex; flex-direction:column; gap:10px;
-    z-index:50;
-  }
-  .nav-dot {
-    width:7px; height:7px; border-radius:50%;
-    background:rgba(212,175,55,.2);
-    border:1px solid rgba(212,175,55,.4);
-    cursor:pointer;
-    transition:background .3s, box-shadow .3s, transform .3s;
-  }
-  .nav-dot.active {
-    background:var(--gold); box-shadow:0 0 10px var(--gold); transform:scale(1.35);
   }
 
   #wishes-btn {
@@ -322,9 +275,6 @@
     letter-spacing: 0.22em;
     text-transform: uppercase;
     cursor: pointer;
-    opacity: 0;
-    transform: translateY(12px);
-    transition: opacity 0.7s ease, transform 0.7s ease, background 0.3s, box-shadow 0.3s;
     flex-shrink: 0;
   }
   #wishes-btn.visible {
@@ -339,6 +289,89 @@
     background: rgba(212,175,55,0.08);
     box-shadow: 0 0 24px rgba(212,175,55,0.3);
   }
+
+  /* ── WISHES ── */
+  #scene-wishes {
+    justify-content:flex-start;
+    padding-top:5rem; padding-bottom:5rem;
+    gap:3rem;
+  }
+  .wishes-header { text-align:center; flex-shrink:0; }
+  .wishes-header h2 {
+    font-family:'Great Vibes',cursive;
+    font-size: clamp(2.2rem,7vw,3.8rem);
+    color:var(--gold);
+    text-shadow:0 0 40px rgba(212,175,55,.6);
+    line-height:1.1;
+  }
+  .wishes-header p {
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    font-size: clamp(.9rem,2.5vw,1.1rem);
+    color:rgba(212,175,55,.6);
+    margin-top:.4rem; letter-spacing:.15em; text-transform:uppercase;
+  }
+  .wishes-container {
+    display:flex; flex-direction:column;
+    align-items:center; gap:2.5rem;
+    width:min(680px,94vw);
+  }
+  .wish-card {
+    position:relative; width:100%;
+    padding: clamp(1.4rem,4vw,2.2rem) clamp(1.2rem,5vw,2.8rem);
+    border:1px solid rgba(212,175,55,.2);
+    border-radius:4px;
+    background:linear-gradient(135deg,rgba(212,175,55,.04),rgba(212,175,55,.01));
+    opacity:0; transform:translateY(28px);
+    transition: opacity .9s ease, transform .9s ease, border-color .3s, box-shadow .3s;
+    overflow:hidden;
+  }
+  .wish-card.revealed { opacity:1; transform:translateY(0); }
+  .wish-card:hover { border-color:rgba(212,175,55,.45); box-shadow:0 0 28px rgba(212,175,55,.1); }
+  .wish-card::before,.wish-card::after { content:'✦'; position:absolute; font-size:.85rem; color:var(--gold); opacity:.45; }
+  .wish-card::before { top:.7rem; left:.9rem; }
+  .wish-card::after  { bottom:.7rem; right:.9rem; }
+  .wish-number {
+    font-family:'Playfair Display',serif;
+    font-size:.65rem; letter-spacing:.35em; text-transform:uppercase;
+    color:var(--gold-dark); margin-bottom:.9rem;
+  }
+  .wish-body {
+    font-family:'Cormorant Garamond',serif;
+    font-size: clamp(1rem,2.8vw,1.2rem);
+    font-style:italic; line-height:1.9;
+    color:rgba(255,253,245,.88);
+  }
+  .wish-signature {
+    margin-top:1rem; text-align:right;
+    font-family:'Great Vibes',cursive;
+    font-size:1.4rem; color:var(--gold); opacity:.8;
+  }
+  .final-line {
+    font-family:'Great Vibes',cursive;
+    font-size: clamp(1.9rem,5vw,2.6rem);
+    color:var(--gold-light); text-align:center;
+    text-shadow:0 0 28px rgba(240,208,96,.5);
+    opacity:0; transition:opacity 1.2s ease;
+    padding-bottom:2rem; flex-shrink:0;
+  }
+  .final-line.revealed { opacity:1; }
+
+  /* ── NAV DOTS ── */
+  .nav-dots {
+    position:fixed; right:1.2rem; top:50%;
+    transform:translateY(-50%);
+    display:flex; flex-direction:column; gap:10px;
+    z-index:50;
+  }
+  .nav-dot {
+    width:7px; height:7px; border-radius:50%;
+    background:rgba(212,175,55,.2);
+    border:1px solid rgba(212,175,55,.4);
+    cursor:pointer;
+    transition:background .3s, box-shadow .3s, transform .3s;
+  }
+  .nav-dot.active { background:var(--gold); box-shadow:0 0 10px var(--gold); transform:scale(1.35); }
 
   @media (max-width:540px) {
     .gallery-grid { grid-template-columns:repeat(2,1fr); }
@@ -355,10 +388,33 @@
 
 <canvas id="sparkle-canvas"></canvas>
 
-<!-- Blinking "tap to begin" hint at bottom of cake screen -->
-<div id="tap-overlay">
-  <span id="tap-hint">✦ &nbsp; Tap anywhere to begin &nbsp; ✦</span>
+<!-- ══════════════════════════════════════
+     ENTRY SCREEN — user clicks once here,
+     music starts, then cake scene appears
+══════════════════════════════════════ -->
+<div id="entry-screen">
+  <div class="entry-ornament">
+    <div class="entry-ornament-line"></div>
+    <div class="entry-ornament-diamond"></div>
+    <div class="entry-ornament-line"></div>
+  </div>
+
+  <p class="entry-title">Happy Birthday<br>Abdul Wadood 🤍</p>
+  <p class="entry-sub">A special surprise awaits you</p>
+
+  <button id="open-btn">✦ &nbsp; Open &nbsp; ✦</button>
+
+  <div class="entry-ornament">
+    <div class="entry-ornament-line"></div>
+    <div class="entry-ornament-diamond"></div>
+    <div class="entry-ornament-line"></div>
+  </div>
 </div>
+
+<!-- Audio — starts when Open is clicked -->
+<audio id="bg-music" loop>
+  <source src="the_mountain-happy-birthday-508020.mp3" type="audio/mpeg">
+</audio>
 
 <div class="nav-dots">
   <div class="nav-dot active" data-scene="0"></div>
@@ -366,15 +422,9 @@
   <div class="nav-dot" data-scene="2"></div>
 </div>
 
-<!-- autoplay muted: browser allows muted autoplay, JS unmutes on first tap -->
-<audio id="bg-music" loop autoplay muted>
-  <source src="the_mountain-happy-birthday-508020.mp3" type="audio/mpeg">
-</audio>
-
 <!-- ════════════ SCENE 1 — CAKE ════════════ -->
-<section id="scene-cake" class="scene visible">
+<section id="scene-cake" class="scene hidden">
   <div class="ornament"><div class="ornament-line"></div><div class="ornament-diamond"></div><div class="ornament-line"></div></div>
-
   <div class="cake-wrap" id="cake-wrap">
     <div class="candle" id="c1"><div class="flame" id="f1"></div><div class="smoke" id="s1"></div></div>
     <div class="candle" id="c2"><div class="flame" id="f2"></div><div class="smoke" id="s2"></div></div>
@@ -398,7 +448,6 @@
       </defs>
     </svg>
   </div>
-
   <p class="wish-text" id="cake-text">Blow the candles and make a wish 🎂✨</p>
   <div class="ornament"><div class="ornament-line"></div><div class="ornament-diamond"></div><div class="ornament-line"></div></div>
 </section>
@@ -449,7 +498,6 @@
     <h2>For You, My Love</h2>
     <p>— with all my heart —</p>
   </div>
-
   <div class="wishes-container">
     <div class="wish-card" id="wish-1">
       <div class="wish-number">✦ &nbsp; One &nbsp; ✦</div>
@@ -464,7 +512,6 @@
       </p>
       <div class="wish-signature">— Forever yours 🤍</div>
     </div>
-
     <div class="wish-card" id="wish-2">
       <div class="wish-number">✦ &nbsp; Two &nbsp; ✦</div>
       <p class="wish-body">
@@ -474,7 +521,6 @@
       </p>
       <div class="wish-signature">— Yours, always 🤍</div>
     </div>
-
     <div class="wish-card" id="wish-3">
       <div class="wish-number">✦ &nbsp; Three &nbsp; ✦</div>
       <p class="wish-body">
@@ -488,12 +534,10 @@
       <div class="wish-signature">With All My Love 🤍</div>
     </div>
   </div>
-
   <div class="ornament"><div class="ornament-line"></div><div class="ornament-diamond"></div><div class="ornament-line"></div></div>
   <p class="final-line" id="final-line">Happy Birthday 🌹</p>
 </section>
 
-<!-- Lightbox -->
 <div id="lightbox">
   <button id="lightbox-close">✕</button>
   <img id="lightbox-img" src="" alt="">
@@ -517,27 +561,26 @@
   (function loop(){ctx.clearRect(0,0,W,H);P.forEach(p=>{p.update();p.draw();});requestAnimationFrame(loop);})();
 })();
 
-// ── AUDIO SETUP ──
-// `autoplay muted` se browser allow karta hai silently start karne ko.
-// Pehle touch/click pe unmute ho jata hai — yahi mobile ka rule hai.
+// ── AUDIO ──
 const audio = document.getElementById('bg-music');
 audio.volume = 0.7;
 
-let audioStarted = false;
-function startAudio() {
-  if (audioStarted) return;
-  audioStarted = true;
-  audio.muted = false;
-  audio.currentTime = 0;
+// ── ENTRY SCREEN → start everything ──
+document.getElementById('open-btn').addEventListener('click', () => {
+  // 1. Start music immediately on this click
   audio.play().catch(() => {});
-  // Hide the tap hint
-  const hint = document.getElementById('tap-hint');
-  if (hint) hint.style.opacity = '0';
-}
 
-// Fire on very first touch OR click — whichever comes first
-document.addEventListener('touchstart', startAudio, { once: true, passive: true });
-document.addEventListener('click',      startAudio, { once: true });
+  // 2. Fade out entry screen
+  const entry = document.getElementById('entry-screen');
+  entry.classList.add('fade-out');
+  setTimeout(() => entry.style.display = 'none', 1000);
+
+  // 3. Show cake scene
+  setTimeout(() => {
+    document.getElementById('scene-cake').classList.replace('hidden','visible');
+    startCake();
+  }, 600);
+});
 
 // ── SCENE MANAGER ──
 const SCENES = ['scene-cake','scene-gallery','scene-wishes'];
@@ -559,9 +602,9 @@ function updateDots() {
 }
 document.querySelectorAll('.nav-dot').forEach(d => {
   d.addEventListener('click', () => {
-    const target = +d.dataset.scene;
-    if (target === 2 && !wishesUnlocked) return;
-    goTo(target);
+    const t = +d.dataset.scene;
+    if (t === 2 && !wishesUnlocked) return;
+    goTo(t);
   });
 });
 
@@ -575,11 +618,13 @@ function blowCandle(id, delay) {
   }, delay);
 }
 
-window.addEventListener('load', () => {
+function startCake() {
   blowCandle(1,1800); blowCandle(3,2100); blowCandle(2,2400); blowCandle(4,2700);
-  setTimeout(() => { document.getElementById('cake-text').textContent = '✨ Your wish has been sent to the stars ✨'; }, 3000);
+  setTimeout(() => {
+    document.getElementById('cake-text').textContent = '✨ Your wish has been sent to the stars ✨';
+  }, 3000);
   setTimeout(() => goTo(1), 4500);
-});
+}
 
 // ── GALLERY ──
 function revealGallery() {
@@ -609,10 +654,10 @@ document.querySelectorAll('.gallery-item').forEach(item => {
 document.getElementById('lightbox-close').addEventListener('click', () => lb.classList.remove('open'));
 lb.addEventListener('click', e => { if (e.target === lb) lb.classList.remove('open'); });
 
-// ── GALLERY SCROLL → show wishes button at bottom ──
+// Gallery scroll → unlock wishes button
 let wishesUnlocked = false;
 const galleryScene = document.getElementById('scene-gallery');
-const wishesBtn   = document.getElementById('wishes-btn');
+const wishesBtn = document.getElementById('wishes-btn');
 
 galleryScene.addEventListener('scroll', function() {
   if (!wishesUnlocked && this.scrollTop + this.clientHeight >= this.scrollHeight - 70) {
@@ -631,7 +676,6 @@ function revealWishes() {
   setTimeout(() => document.getElementById('final-line')?.classList.add('revealed'), 3200);
 }
 
-// ── KEYBOARD ──
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') lb.classList.remove('open');
 });
